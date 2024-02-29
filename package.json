@@ -1,0 +1,15 @@
+{
+  "name": "sass",
+  "version": "1.0.0",
+  "description": "",
+  "main": "compiler.js",
+  "scripts": {
+    "start": "node compiler.mjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "sass": "^1.71.1"
+  }
+}

@@ -1,0 +1,119 @@
+@use "sass:meta";
+@use "sass:color";
+
+$defaultColor: #fa57b6;
+$bg: #242526;
+
+$NavBar_hightlightPerc: 20%;
+$NavBar_borderRadius: 10px;
+
+@mixin colorSchema($c: $defaultColor, $property: color) {
+	#{$property}: $c;
+	&[lightest] { #{$property}: lighten($c, 30%); }
+	&[lighter] { #{$property}: lighten($c, 20%); }
+	&[light] { #{$property}: lighten($c, 10%); }
+	&[dark] { #{$property}: darken($c, 10%); }
+	&[darker] { #{$property}: darken($c, 20%); }
+	&[darkest] { #{$property}: darken($c, 30%); }
+}
+
+@mixin theme($count, $color) {
+	&.theme-#{$count} {
+		h1, h2, h3, h4, h5, h6 {
+			@include colorSchema($color, color);
+
+			&.underline::after {
+				@include colorSchema($color, border-top-color);
+			}
+		}
+
+		hr {
+			@include colorSchema($color, border-top-color);
+		}
+
+
+		div.navbar {
+			ul li {
+				@include colorSchema($color, background-color);
+			}
+
+			ul li:hover, ul li.active {
+				background-color: lighten($color, $NavBar_hightlightPerc);
+			}
+		}
+	}
+}
+
+body {
+	background-color: $bg;
+
+	&[class^="theme-"] {
+		h1, h2, h3, h4, h5, h6 {
+			&.underline::after {
+				content: ' ';
+				border-top: 1px solid;
+				display: block;
+				width: 100%;
+				height: 10px;
+			}
+		}
+	}
+
+	hr {
+		border: unset;
+		border-top: 1px solid;
+
+	}
+
+	@for $n from 1 through 36 {
+		$currColor: color.adjust(#FFAA00, $hue: ($n - 1) * 10);
+		@include theme($n, $currColor);
+	}
+
+	div.items {
+		width: 100%;
+		display: flex;
+		flex-wrap: wrap;
+		flex-direction: row;
+		align-items: stretch;
+		align-content: stretch;
+		justify-content: space-evenly;
+		gap: 10px;
+	}
+
+	div.navbar {
+		ul {
+			padding: 20px;
+			margin: 0;
+			display: flex;
+			flex-direction: row;
+			flex-wrap: nowrap;
+			align-content: stretch;
+			justify-content: space-evenly;
+			align-items: center;
+
+			&.right { justify-content: flex-end; }
+			&.left { justify-content: flex-start; }
+			&.center { justify-content: center; }
+		}
+
+		ul li {
+			width: 100%;
+			list-style: none;
+			text-align: center;
+			line-height: 2rem;
+			transition: background-color 200ms ease-in-out;
+
+			a {
+				transition: color 200ms ease-in-out;
+				text-decoration: none;
+				border-radius: 20px;
+				color: $bg;
+			}
+		}
+
+		ul li:not(:last-child) { border-right: 1px solid $bg; }
+		ul li:first-child { border-radius: $NavBar_borderRadius 0 0 $NavBar_borderRadius; }
+		ul li:last-child { border-radius: 0 $NavBar_borderRadius $NavBar_borderRadius 0; }
+	}
+}
